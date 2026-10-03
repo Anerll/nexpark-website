@@ -1,0 +1,89 @@
+# ============================================================
+# Decap CMS configuration
+# Nexpark Enterprises Limited — https://www.nexpark.com.zm
+# ============================================================
+
+# ------------------------------------------------------------
+# Backend — where edits are saved
+# git-gateway works with Netlify Identity (no GitHub login needed)
+# ------------------------------------------------------------
+backend:
+  name: git-gateway
+  branch: main        # change to 'master' if your default branch is 'master'
+
+# ------------------------------------------------------------
+# Media — where uploaded images are stored in the repo
+# ------------------------------------------------------------
+media_folder: "images/uploads"      # path inside the repo where files are saved
+public_folder: "/images/uploads"    # path used in <img src="..."> on the live site
+
+# ------------------------------------------------------------
+# Site metadata — shown in the CMS header
+# ------------------------------------------------------------
+site_url: https://www.nexpark.com.zm
+display_url: https://www.nexpark.com.zm
+logo_url: https://www.nexpark.com.zm/images/logo.svg
+
+# ------------------------------------------------------------
+# Editorial workflow (optional)
+# Uncomment the line below to enable draft / in-review / published states.
+# Requires Git Gateway + Netlify Identity enabled in your Netlify dashboard.
+# ------------------------------------------------------------
+# publish_mode: editorial_workflow
+
+# ------------------------------------------------------------
+# Collections — what content the CMS can edit
+# ------------------------------------------------------------
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    description: "Manage all blog articles shown on the homepage."
+    files:
+      - name: "posts"
+        label: "All Blog Posts"
+        file: "content/blog.json"
+        description: "Add, edit, reorder, or delete blog posts. The order here is the order shown on the site."
+        fields:
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            summary: "{{fields.title}}  —  {{fields.date}}"
+            collapsed: false
+            minimize_collapsed: false
+            fields:
+              - label: "Title"
+                name: "title"
+                widget: "string"
+                hint: "Shown as the article headline."
+
+              - label: "Date"
+                name: "date"
+                widget: "string"
+                hint: "Free text — e.g. 15 January 2025"
+
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options:
+                  - "Company News"
+                  - "Automotive"
+                  - "Construction"
+                  - "Agriculture"
+                  - "Procurement"
+                  - "Safety"
+                  - "General"
+                default: "Company News"
+
+              - label: "Featured Image"
+                name: "image"
+                widget: "image"
+                hint: "Recommended: 1200 × 750 px (16:10 ratio). You can upload OR paste an external URL."
+                choose_url: true
+                media_library:
+                  config:
+                    multiple: false
+
+              - label: "Content"
+                name: "content"
+                widget: "markdown"
+                hint: "Full article body. Supports headings, lists, links, images, and bold/italic."
