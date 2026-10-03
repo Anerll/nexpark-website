@@ -1,0 +1,55 @@
+# ============================================================
+# Netlify build & header configuration
+# Nexpark Enterprises Limited — https://www.nexpark.com.zm
+# ============================================================
+
+[build]
+  # Site is served from the repository root — index.html lives here
+  publish = "."
+
+# ------------------------------------------------------------
+# Admin area — restrict framing & indexing
+# Applies to /admin/ and everything inside it (Decap CMS UI)
+# ------------------------------------------------------------
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# ------------------------------------------------------------
+# Content (blog JSON) — always fetch fresh so CMS edits appear
+# immediately on the live site without hard-refreshing
+# ------------------------------------------------------------
+[[headers]]
+  for = "/content/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# ------------------------------------------------------------
+# Blog JSON specifically — never cache + correct MIME type
+# ------------------------------------------------------------
+[[headers]]
+  for = "/content/blog.json"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Content-Type = "application/json; charset=utf-8"
+
+# ------------------------------------------------------------
+# Uploaded media — long cache (filenames are unique per upload)
+# ------------------------------------------------------------
+[[headers]]
+  for = "/images/uploads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ------------------------------------------------------------
+# Global security headers — applied to every response
+# ------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
